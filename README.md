@@ -5,4 +5,3 @@
 
 #### This project is divided into phases, and the complete code is located in the last branch.
 
-#### Libraries used
