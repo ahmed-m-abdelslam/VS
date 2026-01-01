@@ -1,0 +1,64 @@
+There is a self-reinforcing feedback loop within science: models of reality are proposed, and experimental tools and methods are created to test those models. Tools dictate what can be discovered, and our models determine which tools are made to begin with. Theoretical models are often useful for a long time, until their fundamental limitations are recognized. The time has come for biology to undertake a reevaluation of its own models, if we want to progress in our understanding of the cell. 1
+1
+
+In molecular biology, no metaphor has carried more weight than the notion of cells as machines. Schoolchildren are taught to think of cells as little computers, filled with molecules that perform logical functions. When François Jacob and Jacques Monod, two Parisian scientists, discovered the principles of gene expression in 1961, they thought of biomolecules as executing “conditional statements common to programming languages to control protein production.” In 1973, physicist Charles H. Bennett compared RNA polymerase, the protein that makes messenger RNA from a DNA template, to a Turing machine.
+
+By equating living cells and computers, one has mistaken the map for the territory. A cell cannot be fully understood by studying all of its components in isolation, as a steam turbine or other machines can be. Cells are stuffed with billions of interacting molecules, the behavior of which changes from one environment to the next. And yet, biologists have long devised methods to study cellular components individually, rather than as continuously changing parts of a whole. The mental model of ‘cells as machines’ has negatively impacted the tools and methods used in biology.
+
+
+Kendrew's original model of the myoglobin molecule, made from wood and plasticine. From Science Museum Group.
+For instance, proteins behave more like liquids than solids; they wiggle around and adopt dozens to hundreds of subtly distinct shapes inside of cells. And yet, our perception of proteins can be skewed based on the static images we produce of them. John Kendrew was the first to figure out the molecular structure of a protein by gathering copious samples from a whale carcass that washed up in Peru. Kendrew solidified the protein into crystals, bombarded the crystals with x-rays, and used the diffraction patterns to piece together a static snapshot. Such images have been incredibly useful, but are ultimately misleading.
+
+Studying molecules in isolation leads to an incomplete view of cells. For decades, there were no suitable ways to study biomolecules in cells across space, time, and in their natural contexts. But now, this is changing. New methods are slowly revealing that cells are far more complicated—and beautiful—than any man-made machine.
+
+A More Accurate Picture
+Every method comes with trade-offs. Methods used to study cells typically seek to measure one variable while excluding others. Consider transcriptomics, a technique used to measure the abundance of messenger RNA, an intermediate molecule between DNA and proteins. In a transcriptomics experiment, scientists grow billions of cells in a test tube, slice them open, extract their RNA molecules, and convert the molecules into DNA copies. They then use expensive machines to “count” the abundance of each sequence. This basic method has helped to decipher the genes underlying embryo development, or those that help microbes resist antibiotics.
+
+Despite its successes, this approach is biased for a couple reasons. First, the method only reflects the quantity of RNA molecules at the particular moment when the cells were cut open. Cells are constantly dialing RNA abundances up-or-down (genes are not static), but this dynamism isn’t captured. Second, the method averages RNA abundances across many billions of cells, obscuring important individual differences. Transcriptomics gives the illusion that RNA abundances are fixed, or relatively stable, because of this averaging effect. In reality, gene expression looks quite different from one individual cell to the next.
+
+The parable of the blind men and the elephant captures the problem with the piecemeal approach to molecular biology. One man touches the elephant’s trunk and describes it as a “thick snake.” Another touches the elephant ears, and calls it a “fan.” The third touches the elephant’s leg, and calls it a “tree.” None of the blind men are correct, of course—true understanding only emerges from a holistic picture.
+
+New methods are enabling molecular biologists to capture a more accurate picture of what’s actually going on in the cell. We are now learning how DNA folds in three-dimensional space, how RNA molecules vary across time, and how proteins are structured within cells.
+
+First, consider DNA. In 1990, the U.S. Department of Energy and National Institutes of Health initiated a 15-year plan to map “the sequence of all 3.2 billion letters” of DNA within the human genome. A first draft was published in 2003; it was a patchwork of sequenced DNA from multiple people. The sequence helped scientists identify thousands of disease-causing mutations and understand the evolution of Homo sapiens by comparing DNA with that of Neanderthals’. But still, a genome sequence is simply a string of letters—what those letters actually mean is a far more difficult question.
+
+It’s now clear that not just the sequence of bases, but also the physical structure, contributes to the meaning of DNA. In the last twenty years, data captured using a method called Hi-C has revealed large chromosome chunks that preferentially touch other chromosome pieces in the genome. 2 
+2
+Certain cancers and developmental disorders arise through errors in how these genes physically fold up in a cell.
+
+
+Six feet of genetic material are packed into every human cell, a feat accomplished by storing chromosomes in a fractal globule pattern. From Leonld A. Mirny and Maxim Imakaev.
+New methods are also enabling the study of RNA molecules over time. Transcriptomics is flawed since its data is an average across many cells, at a particular moment in time. But today, it’s relatively simple to sequence RNA molecules from single cells using “single-cell transcriptomics.” This new approach avoids the averaging problem by working on individual cells, but still only measures RNA molecules at a single moment in time.
+
+But this, too, is changing. In 2019, a research team in Switzerland invented Live-seq, a method to extract RNA molecules from single cells without breaking them open, and then use those molecules in a transcriptomics experiment. The method uses a microscope attached to a tiny glass microchannel to retrieve samples as small as one-quadrillionth of a liter from living cells. The process can be repeated again and again to study how RNA abundances change over time in individual cells.
+
+Live-seq has been used to study individual macrophages, a type of blood cell involved in the immune system, before and after exposure to a bacterial antigen. When macrophages in the human body encounter a bacterium, they begin to make little molecules that induce inflammation. But with Live-seq, the scientists determined that each macrophage actually responds to bacterial invaders in a slightly different way, based on when the exposure occurred in the cell’s life cycle.
+
+
+In situ cryo-electron tomography works by taking a series of images (left) and then stacking them into a 3D representation. In this case, it was used to image the Golgi apparatus and transport vesicles inside of a Chalmydomonas cell. From Bykov Y.S. et al. eLife (2017).
+And finally, new methods are being applied to study proteins in their natural contexts. Historically, most protein structures were solved using x-ray crystallography; proteins were removed from cells, packed into a crystal, and then bombarded with x-ray beams. A sensor, placed behind the crystal, catches the diffracted x-rays, and the diffraction patterns are then used to solve (with some clever mathematics) the three-dimensional structure of the protein.
+
+AlphaFold2, the computational model that predicts protein structures with an accuracy that matches or exceeds experimental methods, was trained mostly on protein structures solved with x-ray crystallography. But again, proteins in cells behave more like liquids than solids; they wiggle to-and-fro in a chaotic dance, and can adopt hundreds of different, distinct shapes.
+
+If one reverses AlphaFold’s predictions, and instead makes the model generative, it tends to design proteins that are hyper-stable and rigid, much like the frozen proteins on which it was trained. This is part of the reason why it will be so difficult to design new functional proteins—AI models are not trained on a complete biological picture.
+
+Structural biologists, though, are rapidly improving their methods. In the last decade, in situ cryo-electron tomography has improved considerably. Rather than removing proteins from cells, this method studies proteins in place. A cell is frozen and then a transmission electron microscope takes a series of two-dimensional images, all at slightly different angles. Computer programs piece the images together to assemble a three-dimensional image with a resolution between 10 and 30 angstroms. 3 
+3
+The images are still static, of course, but at least these images help scientists to understand proteins and other molecules as they exist in situ. 4
+4
+
+Works In Progress
+Studying a cell is not like studying a computer, which works via predictable interactions between well-understood components. Biology is unpredictable. Cells are densely-filled bags of varied molecules that are constantly bouncing around and colliding with one another. And, to make things worse, cells and their molecules often behave one way in isolation, and quite another way in the body. Some proteins switch functions entirely when moved from one environment to the next. 5
+5
+
+While new methods to study DNA, RNA and proteins are exciting, they should not be oversold—they are still works in progress. Live-seq enables one to study RNA molecules over time, but says nothing about the genome. In situ cryo-electron tomography captures photos of proteins within cells, but the proteins are still frozen in time.
+
+The only way to understand all of biology is, perhaps, to emulate The Magic School Bus or Osmosis Jones: shrink a scientist with a video recorder down to a very small size, and send them into a cell to watch the action. But even this approach would surely fail. Sugar molecules fly through the cell at about 250 miles per hour, and our hypothetical mini-scientist would be swiftly dismembered.
+
+We may never understand the cell entirely. Perhaps it is beyond our human capacity. Our only hope may be to “gather everything we learn into first-class quality databases,” as Bert Hubert has written, and then use “computers to make sense of what we have learned.”
+
+But even if new methods fail to completely reveal how cells work, it’s now clear that the most interesting properties of cells emerge in concert and should be studied as holistic systems. Full comprehension may still elude biologists, but molecular biology is less than a century old. There’s still so much to discover.
+
+ 
+
+Thanks to Tony Kulesa, Yonatan Chemla, and Alexey Guzey for reading a draft of this essay.
