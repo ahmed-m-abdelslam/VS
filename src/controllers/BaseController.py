@@ -10,6 +10,8 @@ class BaseController:
         self.file_dir = os.path.join(self.base_dir, "assets/files")
         #self.file_dir = self.base_dir + "/" + "assets/files"
 
-    def get_random_string(self, length: int = 12) -> str:
-    
-        return ''.join(random.choice(string.ascii_lowercase+string.digits) , k = length)
+    def get_random_string(self, length = 12):
+
+        return ''.join(
+            random.choices(string.ascii_lowercase+string.digits, k =length)
+            )

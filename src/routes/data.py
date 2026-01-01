@@ -1,9 +1,9 @@
-from fastapi import FastAPI  , APIRouter , Depends , UploadFile , status
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI  , APIRouter , Depends , UploadFile , status # type: ignore
+from fastapi.responses import JSONResponse # type: ignore
 import os
 from helpers.config import get_settings ,Settings
 from controllers import DataController , ProjectController
-import aiofiles
+import aiofiles # type: ignore
 from models import responseSignal
 import logging
 
