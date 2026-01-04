@@ -3,7 +3,7 @@ from typing import List, Optional # type: ignore
 from bson.objectid import ObjectId # type: ignore
 
 class Project(BaseModel):
-    _id: Optional[ObjectId]
+    id: Optional[ObjectId] = Field(None,alias="_id")
     project_id: str = Field(..., min_length=1)
 
 
