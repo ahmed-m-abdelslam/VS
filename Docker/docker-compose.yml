@@ -1,11 +1,11 @@
 services:
   mongodb:
     image: mongo:7-jammy
-    container_name: mongodb
+    container_name: mngodb
     ports:
-      - "27017:27017"
+      - "27007:27017"
     volumes:
-      - /mongodb:/data/db
+      - ./mngodb:/data/db
     networks:
       - backend
     restart: always
