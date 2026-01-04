@@ -8,6 +8,8 @@ from models import responseSignal
 import logging
 from .schemes.data import ProcessRequest
 from models.ProjectModel import ProjectModel
+from models.ChunkModel import ChunkModel
+from models.db_schemes import DataChunk
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -68,12 +70,29 @@ async def upload_data(requst:Request, project_id: str, file:UploadFile ,
 
 
 @data_router.post("/process/{project_id}")
-async def process_endpoint(project_id: str, process_request: ProcessRequest ):
+async def process_endpoint(requst:Request,project_id: str, process_request: ProcessRequest ):
 
     file_id = process_request.file_id
     chunk_size = process_request.chunk_size
     chunk_overlap = process_request.overlap_size
+    do_reset = process_request.do_reset
 
+    chunk_model = ChunkModel(
+        db_client= requst.app.db_client
+
+    )
+
+    project_model = ProjectModel(
+        db_client= requst.app.db_client
+
+    )
+
+    project = await project_model.get_project_or_create_one(
+        project_id=project_id
+    )
+
+    
+        
 
     process_controller = ProcessController(project_id=project_id)
 
@@ -91,5 +110,23 @@ async def process_endpoint(project_id: str, process_request: ProcessRequest ):
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"message": responseSignal.Processing_Failed.value}
         )
-    return file_chunks
+    file_chunks_records = [
+        DataChunk(
+            chunk_text= chunk.page_content,
+            chunk_metadata= chunk.metadata,
+            chunk_order= i+1,
+            chunk_project_id= project.id
+        ) for i, chunk in enumerate(file_chunks)   
+    ]
 
+    if do_reset == 1:
+        await chunk_model.delete_chunk_by_project_id(project_id=project.id)
+
+    no_records = await chunk_model.insert_many_chunks(chunks= file_chunks_records)
+
+    return JSONResponse(
+        content={
+            "message": responseSignal.Processing_Successful.value,
+            "records_inserted": no_records
+        }
+    )

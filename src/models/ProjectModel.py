@@ -5,13 +5,13 @@ from .enums.DataBaseEnum import DataBaseEnum
 class ProjectModel(BaseDataModel):
 
     def __init__(self, db_client):
-        super().__init__(db_client)
+        super().__init__(db_client= db_client)
         self.collection = self.db_client[DataBaseEnum.COLLECTION_PROJECT_NAME.value]
 
     
     async def create_project(self, project: Project):
 
-        result = await self.collection.insert_one(project.dict())
+        result = await self.collection.insert_one(project.dict(by_alias=True, exclude_unset=True))
         project._id = result.inserted_id
         return project
     
