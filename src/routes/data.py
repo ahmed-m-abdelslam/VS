@@ -9,7 +9,10 @@ import logging
 from .schemes.data import ProcessRequest
 from models.ProjectModel import ProjectModel
 from models.ChunkModel import ChunkModel
-from models.db_schemes import DataChunk
+from models.db_schemes import DataChunk , Asset
+from models.AssetModel import AssetModel
+from models.enums.AssetsTypeEnum import AssetsTypeEnum
+
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -23,7 +26,7 @@ data_router = APIRouter(
 async def upload_data(requst:Request, project_id: str, file:UploadFile ,
                        app_settings: Settings = Depends(get_settings)):
     
-    project_model = ProjectModel(
+    project_model = await ProjectModel.creat_instance(
         db_client= requst.app.db_client
 
     )
@@ -59,11 +62,30 @@ async def upload_data(requst:Request, project_id: str, file:UploadFile ,
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"message": responseSignal.File_Upload_Failed.value}
         )
+    
+
+    asset_model = await AssetModel.creat_instance(
+        db_client= requst.app.db_client
+    )
+
+    asset_resorce = Asset(
+        asset_project_id= project.id,
+        asset_type= AssetsTypeEnum.FILE_F.value,
+        asset_name= file_id,
+        asset_size= os.path.getsize(file_path),
+
+    )
+
+    asset_record= await asset_model.create_asset(asset= asset_resorce)
+
+
+
+
     return JSONResponse(
         
         content={
             "message": responseSignal.File_Is_Valid.value
-            ,"file_id": file_id
+            ,"file_id": str(asset_record.id)
             
             }
     )
@@ -77,12 +99,12 @@ async def process_endpoint(requst:Request,project_id: str, process_request: Proc
     chunk_overlap = process_request.overlap_size
     do_reset = process_request.do_reset
 
-    chunk_model = ChunkModel(
+    chunk_model = await ChunkModel.creat_instance(
         db_client= requst.app.db_client
 
     )
 
-    project_model = ProjectModel(
+    project_model = await ProjectModel.creat_instance(
         db_client= requst.app.db_client
 
     )
