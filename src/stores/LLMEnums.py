@@ -8,3 +8,8 @@ class OpenAIENUMs(Enum):
     SYSTEM = "system"
     USER = "user"
     ASSISTANT = "assistant"
+
+class CohereENUMs(Enum):
+    SYSTEM = "SYSTEM"
+    USER = "USER"
+    ASSISTANT = "CHATBOT"
