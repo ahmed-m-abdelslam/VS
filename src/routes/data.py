@@ -94,7 +94,7 @@ async def upload_data(requst:Request, project_id: str, file:UploadFile ,
 @data_router.post("/process/{project_id}")
 async def process_endpoint(requst:Request,project_id: str, process_request: ProcessRequest ):
 
-    file_id = process_request.file_id
+    #file_id = process_request.file_id
     chunk_size = process_request.chunk_size
     chunk_overlap = process_request.overlap_size
     do_reset = process_request.do_reset
@@ -113,42 +113,92 @@ async def process_endpoint(requst:Request,project_id: str, process_request: Proc
         project_id=project_id
     )
 
-    
-        
+    asset_model = await AssetModel.creat_instance(
+        db_client= requst.app.db_client
+    )
+    project_file_ids = {}
+
+
+    if process_request.file_id:
+        asset_record = await asset_model.gert_asset_record(
+            asset_project_id= project.id,
+            asset_name= process_request.file_id
+        )
+
+        if asset_record is None:
+            return JSONResponse(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                content={"signal": responseSignal.File_ID_Errore.value}
+            )
+
+
+        project_file_ids= {
+            asset_record.id : asset_record.asset_name
+        }
+    else:
+       
+        project_files = await asset_model.get_all_project_assets(
+            asset_project_id= project.id,
+            asset_type= AssetsTypeEnum.FILE_F.value
+        )
+
+        project_file_ids = {
+             record.id : record.asset_name for record in project_files
+               }
+
+    if len( project_file_ids) ==0:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"signal": responseSignal.Processing_Failed.value}
+        )
+
+
 
     process_controller = ProcessController(project_id=project_id)
 
-    file_content = process_controller.get_file_content(file_id=file_id)
-
-    file_chunks = process_controller.process_file_content(
-        file_content=file_content,
-        file_id=file_id,
-        chunk_size=chunk_size,
-        chunk_overlap=chunk_overlap
-    )
-
-    if file_chunks is None or len(file_chunks) == 0:
-        return JSONResponse(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            content={"message": responseSignal.Processing_Failed.value}
-        )
-    file_chunks_records = [
-        DataChunk(
-            chunk_text= chunk.page_content,
-            chunk_metadata= chunk.metadata,
-            chunk_order= i+1,
-            chunk_project_id= project.id
-        ) for i, chunk in enumerate(file_chunks)   
-    ]
+    no_records = 0
+    no_files = 0
 
     if do_reset == 1:
-        await chunk_model.delete_chunk_by_project_id(project_id=project.id)
+            await chunk_model.delete_chunk_by_project_id(project_id=project.id)
 
-    no_records = await chunk_model.insert_many_chunks(chunks= file_chunks_records)
+    for asset_id , file_id in project_file_ids.items():
+
+        file_content = process_controller.get_file_content(file_id=file_id)
+
+        if file_content is None:
+            logger.error(f"File processing failed")
+            continue
+
+        file_chunks = process_controller.process_file_content(
+            file_content=file_content,
+            file_id=file_id,
+            chunk_size=chunk_size,
+            chunk_overlap=chunk_overlap
+        )
+
+        if file_chunks is None or len(file_chunks) == 0:
+            return JSONResponse(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                content={"message": responseSignal.Processing_Failed.value}
+            )
+        file_chunks_records = [
+            DataChunk(
+                chunk_text= chunk.page_content,
+                chunk_metadata= chunk.metadata,
+                chunk_order= i+1,
+                chunk_project_id= project.id,
+                chunk_asset_id= asset_id
+            ) for i, chunk in enumerate(file_chunks)   
+        ]
+
+        no_records += await chunk_model.insert_many_chunks(chunks= file_chunks_records)
+        no_files +=1
 
     return JSONResponse(
         content={
             "message": responseSignal.Processing_Successful.value,
-            "records_inserted": no_records
+            "records_inserted": no_records ,
+            "files_processed": no_files
         }
     )

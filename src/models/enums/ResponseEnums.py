@@ -7,4 +7,6 @@ class responseSignal(Enum):
     File_Upload_Failed = "File upload failed due to an internal error."
     Processing_Failed = "File processing failed."
     Processing_Successful = "File processed successfully."
+    File_ID_Errore = "File ID error."
+
     
