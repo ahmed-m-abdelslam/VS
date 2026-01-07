@@ -13,3 +13,10 @@ class CohereENUMs(Enum):
     SYSTEM = "SYSTEM"
     USER = "USER"
     ASSISTANT = "CHATBOT"
+    DOCUMENT = "search_document"
+    QUERY = "search_query"
+
+
+class DocumentTypeENUMs(Enum):
+    DOCUMENT = "document"
+    QUERY = "query"
