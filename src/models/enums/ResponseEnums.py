@@ -8,5 +8,8 @@ class responseSignal(Enum):
     Processing_Failed = "File processing failed."
     Processing_Successful = "File processed successfully."
     File_ID_Errore = "File ID error."
+    Project_Not_Found = "Project not found."
+    Insert_into_VectorDB_Error = "Inserting into VectorDB error."
+    Insert_into_VectorDB_Success = "Inserting into VectorDB success."
 
     

@@ -17,7 +17,7 @@ class CoHereProvider(LLMInterface):
 
         self.generation_model_id = None
         self.embedding_model_id = None
-        self.embeding_size = None
+        self.embedding_size  = None
 
         self.client = cohere.Client(
             api_key=self.api_key
@@ -32,7 +32,7 @@ class CoHereProvider(LLMInterface):
 
     def set_embedding_model(self, model_id: str , embedding_size: int) :
         self.embedding_model_id = model_id
-        self.embeding_size = embedding_size
+        self.embedding_size  = embedding_size
 
 
 
@@ -86,14 +86,13 @@ class CoHereProvider(LLMInterface):
             model=self.embedding_model_id,
             texts=[self.process_text(text)],
             input_type=input_type,
-            embedding_type=['float']
         )
 
-        if not response or not response.embeddings or not  response.embeddings.float:
+        if not response or not response.embeddings or not  response.embeddings:
             self.logger.error("Invalid response from Cohere embeddings API.")
             return None
 
-        return response.embeddings.float[0]
+        return response.embeddings[0]
 
 
 
