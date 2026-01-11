@@ -2,6 +2,7 @@ from ast import List
 from .BaseController import BaseController
 from models.db_schemes import Project , DataChunk
 from stores.llm.LLMEnums import DocumentTypeENUMs
+import json
 
 class NLPController(BaseController):
     def __init__(self , vector_db_client, generation_client,embedding_client):
@@ -22,8 +23,13 @@ class NLPController(BaseController):
     
     def get_vector_db_collection_info(self, project:Project):
         collection_name = self.creat_collection_name(project_id=project.project_id)
+        collection_info = self.vector_db_client.get_collection_info(collection_name=collection_name)
 
-        return self.vector_db_client.get_collection_info(collection_name=collection_name)
+        return json.loads(
+            json.dumps(collection_info , default=lambda o: o.__dict__)
+            )
+    
+
     
     def index_into_vector_db(self, project:Project, chunks:list[DataChunk] , do_rset :bool=False, chunks_ids: List = None):
 
@@ -32,12 +38,21 @@ class NLPController(BaseController):
         texts = [ c.chunk_text for c in chunks ]
         metadatas = [ c.chunk_metadata for c in chunks ]
 
+        """
         vectors = [
             self.embedding_client.embed_text(
                 text=text,
                 document_type=DocumentTypeENUMs.DOCUMENT.value
             ) for text in texts
         ]
+        """
+
+        vectors = self.embedding_client.embed_texts(
+            texts=texts,
+            document_type=DocumentTypeENUMs.DOCUMENT.value
+            )
+
+
 
         _ = self.vector_db_client.create_collection(
             collection_name=collection_name,
@@ -52,3 +67,30 @@ class NLPController(BaseController):
             metadata=metadatas
             ,record_ids=chunks_ids
         )
+
+        return True
+
+    def search_vector_db_collection(self,project:Project,text:str,limit:int=10):
+        
+        collection_name = self.creat_collection_name(project_id=project.project_id)
+
+        vector = self.embedding_client.embed_text(
+            text=text,
+            document_type=DocumentTypeENUMs.QUERY.value
+        )
+
+        if not vector or len(vector) == 0:
+            return False
+
+        search_results = self.vector_db_client.search_by_vector(
+            collection_name=collection_name,
+            vector=vector,
+            limit=limit
+        )
+
+        if not search_results:
+            return False
+
+        return json.loads(
+            json.dumps(search_results , default=lambda o: o.__dict__)
+            )
