@@ -30,7 +30,7 @@ class NLPController(BaseController):
             )
     
 
-    
+    # Index data chunks into the vector database
     def index_into_vector_db(self, project:Project, chunks:list[DataChunk] , do_rset :bool=False, chunks_ids: List = None):
 
         collection_name = self.creat_collection_name(project_id=project.project_id)
