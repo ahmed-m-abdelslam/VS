@@ -103,6 +103,24 @@ class CoHereProvider(LLMInterface):
             "role": role,
             "text": self.process_text(prompt)
         }
+    
+    # New to solve api limiet of batch size
+    def embed_texts(self, texts: list[str], document_type=None):
+        input_type = CohereENUMs.DOCUMENT.value
+        if document_type == DocumentTypeENUMs.QUERY.value:
+            input_type = CohereENUMs.QUERY.value
+
+        response = self.client.embed(
+            model=self.embedding_model_id,
+            texts=[self.process_text(t) for t in texts],
+            input_type=input_type
+        )
+
+        if not response or not response.embeddings:
+            return None
+
+        return response.embeddings
+
 
         
     
