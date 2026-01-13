@@ -15,5 +15,7 @@ class responseSignal(Enum):
     Get_VectorDB_Collection_Info_Error = "Getting VectorDB collection info error."
     Search_In_VectorDB_Error = "Searching in VectorDB error."
     Search_In_VectorDB_Success = "Searching in VectorDB success."
+    RAG_Answer_Error = "RAG answer error."
+    RAG_Answer_Success = "RAG answer success."
 
     

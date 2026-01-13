@@ -143,7 +143,8 @@ async def search_indexed_data(request:Request, project_id: str, search_request:S
     nlp_controller = NLPController(
         vector_db_client=request.app.vector_db_client,
         generation_client=request.app.generation_client,
-        embedding_client=request.app.embedding_client
+        embedding_client=request.app.embedding_client,
+        template_parser=request.app.template_parser
     )
 
     search_results = nlp_controller.search_vector_db_collection(
@@ -162,6 +163,50 @@ async def search_indexed_data(request:Request, project_id: str, search_request:S
     return JSONResponse(
         content={
             "signal": responseSignal.Search_In_VectorDB_Success.value,
-            "results": search_results
+            "results": [result.dict() for result in search_results]
+        }
+    )
+
+
+@nlp_router.post("/index/answer/{project_id}")
+async def answer_rag(request:Request, project_id: str, search_request:SearchRequest):
+    
+    project_model = await ProjectModel.creat_instance(db_client=request.app.db_client)
+
+    project= await project_model.get_project_or_create_one(project_id=project_id)
+
+    if not project:
+        return JSONResponse(
+            status_code=status.HTTP_404_NOT_FOUND,
+            content={
+                "signal": responseSignal.Project_Not_Found.value
+            }
+            )
+        
+    nlp_controller = NLPController(
+        vector_db_client=request.app.vector_db_client,
+        generation_client=request.app.generation_client,
+        embedding_client=request.app.embedding_client,
+        template_parser=request.app.template_parser
+    )
+
+    answer , full_prompt , chat_history = nlp_controller.answer_rag_question(
+        project=project,
+        query=search_request.text,
+        limit=search_request.limit
+    )
+    if not answer:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={
+                "signal": responseSignal.RAG_Answer_Error.value
+            }
+        )
+    return JSONResponse(
+        content={
+            "signal": responseSignal.RAG_Answer_Success.value,
+            "answer": answer,
+            "full_prompt": full_prompt,
+            "chat_history": chat_history
         }
     )
