@@ -41,7 +41,8 @@ async def index_and_push_data(request:Request, project_id: str, push_request:Pus
     nlp_controller = NLPController(
         vector_db_client=request.app.vector_db_client,
         generation_client=request.app.generation_client,
-        embedding_client=request.app.embedding_client
+        embedding_client=request.app.embedding_client,
+        template_parser=request.app.template_parser
     )
 
     has_records = True
@@ -104,7 +105,8 @@ async def get_project_indexed_info(request:Request, project_id: str):
     nlp_controller = NLPController(
         vector_db_client=request.app.vector_db_client,
         generation_client=request.app.generation_client,
-        embedding_client=request.app.embedding_client
+        embedding_client=request.app.embedding_client,
+        template_parser=request.app.template_parser
     )
 
     collection_info = nlp_controller.get_vector_db_collection_info(project=project)
