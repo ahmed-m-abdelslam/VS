@@ -7,4 +7,15 @@ class responseSignal(Enum):
     File_Upload_Failed = "File upload failed due to an internal error."
     Processing_Failed = "File processing failed."
     Processing_Successful = "File processed successfully."
+    File_ID_Errore = "File ID error."
+    Project_Not_Found = "Project not found."
+    Insert_into_VectorDB_Error = "Inserting into VectorDB error."
+    Insert_into_VectorDB_Success = "Inserting into VectorDB success."
+    VECTOR_COLLECTION_RETRIEVED = "Vector collection retrieved successfully."
+    Get_VectorDB_Collection_Info_Error = "Getting VectorDB collection info error."
+    Search_In_VectorDB_Error = "Searching in VectorDB error."
+    Search_In_VectorDB_Success = "Searching in VectorDB success."
+    RAG_Answer_Error = "RAG answer error."
+    RAG_Answer_Success = "RAG answer success."
+
     

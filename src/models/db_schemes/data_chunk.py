@@ -8,6 +8,7 @@ class DataChunk(BaseModel):
     chunk_metadata: dict
     chunk_order: int = Field(..., getattr=0)
     chunk_project_id: ObjectId
+    chunk_asset_id: ObjectId
     
 
     class Config:
@@ -25,3 +26,8 @@ class DataChunk(BaseModel):
                 "unique":False
             }
         ]
+    
+
+class RetrievedDocument(BaseModel):
+    text: str
+    score: float
