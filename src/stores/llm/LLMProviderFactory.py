@@ -1,5 +1,5 @@
 from .LLMEnums import LLMEnums
-from .providers import OpenAIProvider , CoHereProvider
+from .providers import OpenAIProvider , CoHereProvider , OllamaProvider
 
 class LLMProviderFactory:
     def __init__(self,config: dict):
@@ -22,5 +22,14 @@ class LLMProviderFactory:
                  default_generation_output_max_tokens=self.config.DEFAULT_GENERATION_OUTPUT_MAX_TOKENS,
                  default_generation_temperature=self.config.DEFAULT_GENERATION_TEMPERATURE
               )
+        
+        if provider == LLMEnums.OLLAMA.value:
+            return OllamaProvider(
+                api_key=None,  # Ollama مش محتاج API key
+                api_url=self.config.OPENAI_API_URL,
+                default_input_max_characters=self.config.DEFAULT_INPUT_MAX_CHARACTERS,
+                default_generation_output_max_tokens=self.config.DEFAULT_GENERATION_OUTPUT_MAX_TOKENS,
+                default_generation_temperature=self.config.DEFAULT_GENERATION_TEMPERATURE,
+            )
 
         return None
