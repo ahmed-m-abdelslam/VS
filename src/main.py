@@ -21,7 +21,7 @@ async def startup_span():
 
     # Initialize PostgreSQL connection
     postgres_conn = f"postgresql+asyncpg://{settings.POSTGRESQL_USERNAME}:{settings.POSTGRESQL_PASSWORD}@{settings.POSTGRESQL_HOST}:{settings.POSTGRESQL_PORT}/{settings.POSTGRESQL_DB_NAME}"
-    app.db_engine = create_async_engine(postgres_conn, echo=True)
+    app.db_engine = create_async_engine(postgres_conn)
 
     app.db_client = sessionmaker(
         bind=app.db_engine,
@@ -54,7 +54,7 @@ async def startup_span():
 
 #@app.on_event("shutdown")
 async def shutdown_span():
-    app.mongodb_conn.close()
+    await app.db_engine.dispose()
     app.vector_db_client.disconnect()
 
 #app.router.lifespan.on_startup.append(startup_span)
