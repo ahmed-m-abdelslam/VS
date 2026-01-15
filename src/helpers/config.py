@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     FILE_ALLOWED_TYPES: list
     FILE_MAX_SIZE_MB: int
     FILE_DEFAULT_CHUNK_SIZE: int
+    
     MONGODB_URL: str
     MONGODB_DB_NAME: str
 
@@ -29,6 +30,13 @@ class Settings(BaseSettings):
 
     PRIMARY_LANG: str = "en"
     DEFAULT_LANG: str = "en"
+
+
+    POSTGRESQL_USERNAME: str
+    POSTGRESQL_PASSWORD: str
+    POSTGRESQL_HOST: str
+    POSTGRESQL_PORT: int
+    POSTGRESQL_DB_NAME: str
 
     
     class Config:

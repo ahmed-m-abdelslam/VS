@@ -5,15 +5,31 @@ from helpers.config import get_settings
 from stores.llm.LLMProviderFactory import LLMProviderFactory
 from stores.vectordb.VectorDBProviderFactory import VectorDBProviderFactory
 from stores.llm.templates.template_parser import TemplateParser
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession # type: ignore
+from sqlalchemy.orm import sessionmaker # type: ignore
+
 
 app = FastAPI()
 
 #@app.on_event("startup")
 async def startup_span():
     settings = get_settings()
-    app.mongodb_conn = AsyncIOMotorClient(settings.MONGODB_URL)
-    app.db_client = app.mongodb_conn[settings.MONGODB_DB_NAME]
 
+    # Initialize MongoDB connection
+    #app.mongodb_conn = AsyncIOMotorClient(settings.MONGODB_URL)
+    #app.db_client = app.mongodb_conn[settings.MONGODB_DB_NAME]
+
+    # Initialize PostgreSQL connection
+    postgres_conn = f"postgresql+asyncpg://{settings.POSTGRESQL_USERNAME}:{settings.POSTGRESQL_PASSWORD}@{settings.POSTGRESQL_HOST}:{settings.POSTGRESQL_PORT}/{settings.POSTGRESQL_DB_NAME}"
+    app.db_engine = create_async_engine(postgres_conn, echo=True)
+
+    app.db_client = sessionmaker(
+        bind=app.db_engine,
+        class_=AsyncSession,
+        expire_on_commit=False
+    )
+
+    # Initialize LLM and VectorDB provider factories
     llm_provider_factory = LLMProviderFactory(config=settings)
     vectordb_provider_factory = VectorDBProviderFactory(config=settings)
 
