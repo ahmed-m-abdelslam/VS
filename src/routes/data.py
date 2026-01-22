@@ -23,7 +23,7 @@ data_router = APIRouter(
 )
 
 @data_router.post("/upload/{project_id}")
-async def upload_data(requst:Request, project_id: str, file:UploadFile ,
+async def upload_data(requst:Request, project_id: int, file:UploadFile ,
                        app_settings: Settings = Depends(get_settings)):
     
     project_model = await ProjectModel.creat_instance(
@@ -69,7 +69,7 @@ async def upload_data(requst:Request, project_id: str, file:UploadFile ,
     )
 
     asset_resorce = Asset(
-        asset_project_id= project.id,
+        asset_project_id= project.project_id,
         asset_type= AssetsTypeEnum.FILE_F.value,
         asset_name= file_id,
         asset_size= os.path.getsize(file_path),
@@ -85,14 +85,14 @@ async def upload_data(requst:Request, project_id: str, file:UploadFile ,
         
         content={
             "message": responseSignal.File_Is_Valid.value
-            ,"file_id": str(asset_record.id)
+            ,"file_id": str(asset_record.asset_id)
             
             }
     )
 
 
 @data_router.post("/process/{project_id}")
-async def process_endpoint(requst:Request,project_id: str, process_request: ProcessRequest ):
+async def process_endpoint(requst:Request,project_id: int, process_request: ProcessRequest ):
 
     #file_id = process_request.file_id
     chunk_size = process_request.chunk_size
@@ -121,7 +121,7 @@ async def process_endpoint(requst:Request,project_id: str, process_request: Proc
 
     if process_request.file_id:
         asset_record = await asset_model.gert_asset_record(
-            asset_project_id= project.id,
+            asset_project_id= project.project_id,
             asset_name= process_request.file_id
         )
 
@@ -133,17 +133,17 @@ async def process_endpoint(requst:Request,project_id: str, process_request: Proc
 
 
         project_file_ids= {
-            asset_record.id : asset_record.asset_name
+            asset_record.asset_id : asset_record.asset_name
         }
     else:
        
         project_files = await asset_model.get_all_project_assets(
-            asset_project_id= project.id,
+            asset_project_id= project.project_id,
             asset_type= AssetsTypeEnum.FILE_F.value
         )
 
         project_file_ids = {
-             record.id : record.asset_name for record in project_files
+             record.asset_project_id : record.asset_name for record in project_files
                }
 
     if len( project_file_ids) ==0:
@@ -160,7 +160,7 @@ async def process_endpoint(requst:Request,project_id: str, process_request: Proc
     no_files = 0
 
     if do_reset == 1:
-            await chunk_model.delete_chunk_by_project_id(project_id=project.id)
+            await chunk_model.delete_chunk_by_project_id(project_id=project.project_id)
 
     for asset_id , file_id in project_file_ids.items():
 
@@ -187,7 +187,7 @@ async def process_endpoint(requst:Request,project_id: str, process_request: Proc
                 chunk_text= chunk.page_content,
                 chunk_metadata= chunk.metadata,
                 chunk_order= i+1,
-                chunk_project_id= project.id,
+                chunk_project_id= project.project_id,
                 chunk_asset_id= asset_id
             ) for i, chunk in enumerate(file_chunks)   
         ]
