@@ -10,6 +10,7 @@
 - Docker
 - Studio 3T Community Edition
 - MongoDB
+- SQL Alchemy
 
 #### Important Commands
 
@@ -20,4 +21,9 @@ conda create -n EnvName python=3.10
 - Activate enviroment
 ```bash
 conda activate EnvName
+```
+- Clean Terminal
+```bash
+export PS1="\[\033[01;32m\]\u@\h:\w\n\[\033[00m\]\$ "
 
+```
