@@ -143,7 +143,7 @@ async def process_endpoint(requst:Request,project_id: int, process_request: Proc
         )
 
         project_file_ids = {
-             record.asset_project_id : record.asset_name for record in project_files
+             record.asset_id : record.asset_name for record in project_files
                }
 
     if len( project_file_ids) ==0:

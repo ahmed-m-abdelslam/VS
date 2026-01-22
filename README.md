@@ -27,3 +27,8 @@ conda activate EnvName
 export PS1="\[\033[01;32m\]\u@\h:\w\n\[\033[00m\]\$ "
 
 ```
+- Run FastAPI
+```bash
+uvicorn main:app --reload
+
+```
