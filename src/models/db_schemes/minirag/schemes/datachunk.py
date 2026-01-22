@@ -6,7 +6,7 @@ from sqlalchemy import Index # type: ignore
 import uuid
 from pydantic import BaseModel # type: ignore
 
-class Chunk(SQLAlchemyBase):
+class DataChunk(SQLAlchemyBase):
 
     __tablename__ = "chunks"
 
